@@ -2,6 +2,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { ShieldCheck, Search, Ban, FileText, Lock, CheckCircle2 } from "lucide-react";
+import Link from "next/link";
 
 export function SafetySection() {
     const features = [
@@ -109,6 +110,7 @@ export function SafetySection() {
                 </div>
 
                 {/* Trust Banner */}
+
                 <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     whileInView={{ opacity: 1, scale: 1 }}
@@ -125,34 +127,19 @@ export function SafetySection() {
                     <p className="text-base md:text-lg opacity-90 max-w-2xl mx-auto">
                         Join thousands of verified college students who trust MatchHub for safe, authentic connections on campus.
                     </p>
-                    <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="mt-6 px-8 py-3 bg-white text-purple-600 font-bold rounded-full hover:shadow-lg transition-shadow"
-                    >
-                        Join Safely Today
-                    </motion.button>
+                    <Link href='/sign-up' >
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="mt-6 px-8 py-3 bg-white text-purple-600 cursor-pointer font-bold rounded-full hover:shadow-lg transition-shadow"
+                        >
+                            Join Safely Today
+                        </motion.button>
+                    </Link>
                 </motion.div>
 
-                {/* Additional Trust Indicators */}
-                <div className="mt-12 flex flex-wrap justify-center gap-6 text-center">
-                    <div className="flex items-center gap-2 text-gray-700 dark:text-neutral-300">
-                        <CheckCircle2 className="w-5 h-5 text-green-500" />
-                        <span className="text-sm font-medium">24/7 Moderation</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-gray-700 dark:text-neutral-300">
-                        <CheckCircle2 className="w-5 h-5 text-green-500" />
-                        <span className="text-sm font-medium">Encrypted Messaging</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-gray-700 dark:text-neutral-300">
-                        <CheckCircle2 className="w-5 h-5 text-green-500" />
-                        <span className="text-sm font-medium">GDPR Compliant</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-gray-700 dark:text-neutral-300">
-                        <CheckCircle2 className="w-5 h-5 text-green-500" />
-                        <span className="text-sm font-medium">Student Privacy Protected</span>
-                    </div>
-                </div>
+
+
             </div>
         </section>
     );

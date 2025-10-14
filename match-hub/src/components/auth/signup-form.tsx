@@ -66,6 +66,10 @@ const signupSchema = z.object({
         message: "Please select a gender",
     }),
     phone_number: z.string().optional(),
+    college_registration_number: z
+        .string()
+        .length(8, "College registration number must be exactly 8 digits")
+        .regex(/^7\d{7}$/, "College registration number must start with 7 and contain only digits (e.g., 71234567)"),
 }).refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
     path: ["confirmPassword"],
@@ -189,6 +193,25 @@ export function SignupForm() {
                                     <FormDescription>
                                         Use your college email address
                                     </FormDescription>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="college_registration_number"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>College Registration Number</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            type="text"
+                                            maxLength={8}
+                                            {...field}
+                                        />
+                                    </FormControl>
+
                                     <FormMessage />
                                 </FormItem>
                             )}

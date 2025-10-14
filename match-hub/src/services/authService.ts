@@ -17,6 +17,7 @@ export interface SignupData {
     date_of_birth: string;
     gender: "M" | "F" | "O";
     phone_number?: string;
+    college_registration_number: string;
 }
 
 export interface LoginData {

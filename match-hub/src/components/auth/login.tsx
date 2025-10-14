@@ -49,7 +49,7 @@ export function LoginForm() {
 
         try {
             await login(values.email, values.password);
-            router.push("/dashboard");
+            router.push("/profile");
         } catch (err: any) {
             setError(
                 err.response?.data?.error ||
