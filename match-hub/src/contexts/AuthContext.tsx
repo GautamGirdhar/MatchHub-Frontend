@@ -60,10 +60,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const publicRoutes = ['/auth/login', '/auth/signup', '/profile/complete'];
         const isPublicRoute = publicRoutes.some(route => pathname.startsWith(route));
 
-        // Redirect to profile completion if profile is incomplete
-        if (!isPublicRoute && profileStatus && !profileStatus.is_completed) {
-            router.push('/profile/complete');
-        }
+
     }, [user, profileStatus, pathname, isLoading]);
 
     const login = async (email: string, password: string) => {

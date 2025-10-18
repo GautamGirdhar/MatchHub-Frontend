@@ -29,6 +29,29 @@ export interface Interest {
     category: string;
 }
 
+export interface CompleteProfile {
+    user: {
+        email: string;
+        first_name: string;
+        last_name: string;
+        date_of_birth: string;
+        gender: string;
+        college_registration_number: string;
+    };
+    profile: Profile;
+    preferences: Preferences;
+    photos: ProfilePhoto[];
+    interests: Interest[];
+}
+
+export interface ProfilePhoto {
+    id: number;
+    photo: string;
+    is_primary: boolean;
+    display_order: number;
+    uploaded_at: string;
+}
+
 export const profileService = {
     // Check profile status
     async checkStatus(): Promise<ProfileStatus> {
@@ -109,6 +132,26 @@ export const profileService = {
         const response = await api.post('/profiles/interests/me', {
             interest_ids: interestIds,
         });
+        return response.data;
+    },
+
+    // Get complete profile
+    async getCompleteProfile(): Promise<CompleteProfile> {
+        const response = await api.get('/profiles/me/complete');
+        return response.data;
+    },
+
+    // Reorder photos
+    async reorderPhotos(photoOrders: Array<{ id: number; display_order: number }>) {
+        const response = await api.put('/profiles/photos/reorder', {
+            photo_orders: photoOrders,
+        });
+        return response.data;
+    },
+
+    // Update photo
+    async updatePhoto(photoId: number, data: { is_primary?: boolean; display_order?: number }) {
+        const response = await api.patch(`/profiles/photos/${photoId}`, data);
         return response.data;
     },
 };

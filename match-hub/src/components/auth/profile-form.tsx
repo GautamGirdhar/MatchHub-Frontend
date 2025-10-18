@@ -80,9 +80,8 @@ export default function CompleteProfile() {
             if (selectedInterests.length > 0) {
                 await profileService.addInterests(selectedInterests);
             }
-
+            router.push('/profile-detail');
             await checkProfileCompletion();
-            router.push('/');
         } catch (error) {
             console.error('Failed to complete profile:', error);
             alert('Failed to save profile. Please try again.');
@@ -92,252 +91,363 @@ export default function CompleteProfile() {
     };
 
     return (
-        <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-b from-pink-50 to-white py-8 px-4 sm:px-6 lg:px-8">
-            <div className="w-full max-w-5xl">
-                <Card className="p-2 sm:p-2 md:p-10 shadow-xl rounded-2xl">
-                    <h1 className="text-2xl sm:text-3xl font-bold mb-2 text-center sm:text-left">Complete Your Profile</h1>
-                    <p className="text-gray-600 mb-6">
-                        {profileStatus && `${profileStatus.completion_percentage}% complete`}
-                    </p>
-
-                    <Progress value={(step / 4) * 100} className="mb-6" />
-
-                    <CardContent className="space-y-8">
-                        {/* Step 1: Basic Info */}
-                        {step === 1 && (
-                            <div className="space-y-4">
-                                <h2 className="text-xl font-semibold">Basic Information</h2>
-
-                                <div className="space-y-2">
-                                    <Label htmlFor="bio">Bio</Label>
-                                    <Textarea
-                                        id="bio"
-                                        name="bio"
-                                        value={formData.bio}
-                                        onChange={handleInputChange}
-                                        placeholder="Tell us about yourself..."
-                                        rows={4}
-                                        required
-                                    />
-                                </div>
-
-                                <div className="space-y-2">
-                                    <Label htmlFor="looking_for">Looking For</Label>
-                                    <Select
-                                        value={formData.looking_for}
-                                        onValueChange={(value) =>
-                                            setFormData({ ...formData, looking_for: value })
-                                        }
-                                    >
-                                        <SelectTrigger id="looking_for">
-                                            <SelectValue placeholder="Looking for something special?" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="friendship">Friendship</SelectItem>
-                                            <SelectItem value="serious_relationship">Serious Relationship</SelectItem>
-                                            <SelectItem value="casual">Casual Dating</SelectItem>
-                                            <SelectItem value="long_term">Long-term Connection</SelectItem>
-                                            <SelectItem value="networking">Networking</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-
-
-                                <div className="space-y-2">
-                                    <Label htmlFor="height_cm">Height (cm)</Label>
-                                    <Input
-                                        id="height_cm"
-                                        name="height_cm"
-                                        type="number"
-                                        value={formData.height_cm}
-                                        onChange={handleInputChange}
-                                        required
-                                    />
-                                </div>
-
-                                <div className="space-y-2">
-                                    <Label htmlFor="course">Course</Label>
-                                    <Input
-                                        id="course"
-                                        name="course"
-                                        value={formData.course}
-                                        onChange={handleInputChange}
-                                        placeholder="e.g., Computer Science"
-                                        required
-                                    />
-                                </div>
-
-                                <div className="space-y-2">
-                                    <Label htmlFor="graduation_year">Graduation Year</Label>
-                                    <Input
-                                        id="graduation_year"
-                                        name="graduation_year"
-                                        type="number"
-                                        value={formData.graduation_year}
-                                        onChange={handleInputChange}
-                                        placeholder="e.g., 2025"
-                                        required
-                                    />
-                                </div>
-
-                                <div className="space-y-2">
-                                    <Label htmlFor="religion">Religion (optional)</Label>
-                                    <Input
-                                        id="religion"
-                                        name="religion"
-                                        value={formData.religion}
-                                        onChange={handleInputChange}
-                                    />
-                                </div>
-
-                                <Button onClick={() => setStep(2)} className="w-full">
-                                    Next
-                                </Button>
-                            </div>
+        <div className="min-h-screen w-full bg-gradient-to-b from-pink-50 to-white">
+            {/* Fixed Header */}
+            <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-sm border-b border-gray-200 px-4 py-4 sm:px-6">
+                <div className="max-w-2xl mx-auto">
+                    <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">
+                        Complete Your Profile
+                    </h1>
+                    <div className="flex items-center justify-between mt-2">
+                        <p className="text-sm text-gray-600">
+                            Step {step} of 4
+                        </p>
+                        {profileStatus && (
+                            <p className="text-sm font-medium text-pink-600">
+                                {profileStatus.completion_percentage}% complete
+                            </p>
                         )}
+                    </div>
+                    <Progress value={(step / 4) * 100} className="mt-3 h-2" />
+                </div>
+            </div>
 
-                        {/* Step 2: Preferences */}
-                        {step === 2 && (
-                            <div className="space-y-4">
-                                <h2 className="text-xl font-semibold">Preferences</h2>
+            {/* Main Content - Scrollable */}
+            <div className="px-4 py-6 sm:px-6 pb-24">
+                <div className="max-w-2xl mx-auto">
+                    <Card className="border-0 shadow-lg">
+                        <CardContent className="p-4 sm:p-6 md:p-8">
+                            {/* Step 1: Basic Info */}
+                            {step === 1 && (
+                                <div className="space-y-5">
+                                    <div>
+                                        <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">
+                                            Basic Information
+                                        </h2>
+                                        <p className="text-sm text-gray-500 mb-6">
+                                            Let others know more about you
+                                        </p>
+                                    </div>
 
-                                <div className="space-y-2">
-                                    <Label>Gender Preference</Label>
-                                    <Select
-                                        value={preferences.gender_preference}
-                                        onValueChange={(value) =>
-                                            setPreferences({ ...preferences, gender_preference: value })
-                                        }
-                                    >
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Select gender preference" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="male">Male</SelectItem>
-                                            <SelectItem value="female">Female</SelectItem>
-                                            <SelectItem value="both">Both</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="bio" className="text-sm font-medium">Bio *</Label>
+                                        <Textarea
+                                            id="bio"
+                                            name="bio"
+                                            value={formData.bio}
+                                            onChange={handleInputChange}
+                                            placeholder="Tell us about yourself..."
+                                            rows={4}
+                                            className="resize-none text-base"
+                                            required
+                                        />
+                                        <p className="text-xs text-gray-500">
+                                            {formData.bio.length}/500 characters
+                                        </p>
+                                    </div>
 
-                                <div className="space-y-2">
-                                    <Label>Education Preference</Label>
-                                    <Input
-                                        value={preferences.education_preference}
-                                        onChange={(e) =>
-                                            setPreferences({
-                                                ...preferences,
-                                                education_preference: e.target.value,
-                                            })
-                                        }
-                                        placeholder="Optional"
-                                    />
-                                </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="looking_for" className="text-sm font-medium">
+                                            Looking For *
+                                        </Label>
+                                        <Select
+                                            value={formData.looking_for}
+                                            onValueChange={(value) =>
+                                                setFormData({ ...formData, looking_for: value })
+                                            }
+                                        >
+                                            <SelectTrigger id="looking_for" className="text-base">
+                                                <SelectValue placeholder="What are you looking for?" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="friendship">Friendship</SelectItem>
+                                                <SelectItem value="serious_relationship">
+                                                    Serious Relationship
+                                                </SelectItem>
+                                                <SelectItem value="casual">Casual Dating</SelectItem>
+                                                <SelectItem value="long_term">Long-term Connection</SelectItem>
+                                                <SelectItem value="networking">Networking</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
 
-                                <div className="flex flex-col sm:flex-row gap-3">
-                                    <Button
-                                        variant="outline"
-                                        className="flex-1"
-                                        onClick={() => setStep(1)}
-                                    >
-                                        Back
-                                    </Button>
-                                    <Button className="flex-1" onClick={() => setStep(3)}>
-                                        Next
-                                    </Button>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Step 3: Photos */}
-                        {step === 3 && (
-                            <div className="space-y-4">
-                                <h2 className="text-xl font-semibold">Upload Photos</h2>
-                                <p className="text-sm text-gray-600">
-                                    Upload at least one photo. The first photo will be your primary photo.
-                                </p>
-
-                                <Input
-                                    type="file"
-                                    accept="image/*"
-                                    multiple
-                                    onChange={handlePhotoUpload}
-                                    required
-                                />
-
-                                {photos.length > 0 && (
-                                    <p className="text-sm text-gray-500">
-                                        {photos.length} photo(s) selected
-                                    </p>
-                                )}
-
-                                <div className="flex flex-col sm:flex-row gap-3">
-                                    <Button
-                                        variant="outline"
-                                        className="flex-1"
-                                        onClick={() => setStep(2)}
-                                    >
-                                        Back
-                                    </Button>
-                                    <Button
-                                        className="flex-1"
-                                        onClick={() => setStep(4)}
-                                        disabled={photos.length === 0}
-                                    >
-                                        Next
-                                    </Button>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Step 4: Interests */}
-                        {step === 4 && (
-                            <div className="space-y-4">
-                                <h2 className="text-xl font-semibold">Select Your Interests</h2>
-
-                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                                    {allInterests.map((interest) => (
-                                        <div key={interest.id} className="flex items-center space-x-2">
-                                            <Checkbox
-                                                checked={selectedInterests.includes(interest.id)}
-                                                onCheckedChange={(checked) => {
-                                                    if (checked) {
-                                                        setSelectedInterests([
-                                                            ...selectedInterests,
-                                                            interest.id,
-                                                        ]);
-                                                    } else {
-                                                        setSelectedInterests(
-                                                            selectedInterests.filter((id) => id !== interest.id)
-                                                        );
-                                                    }
-                                                }}
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div className="space-y-2">
+                                            <Label htmlFor="height_cm" className="text-sm font-medium">
+                                                Height (cm) *
+                                            </Label>
+                                            <Input
+                                                id="height_cm"
+                                                name="height_cm"
+                                                type="number"
+                                                inputMode="numeric"
+                                                value={formData.height_cm}
+                                                onChange={handleInputChange}
+                                                placeholder="e.g., 170"
+                                                className="text-base"
+                                                required
                                             />
-                                            <Label className="text-sm">{interest.interest_name}</Label>
                                         </div>
-                                    ))}
-                                </div>
 
-                                <div className="flex flex-col sm:flex-row gap-3">
-                                    <Button
-                                        variant="outline"
-                                        className="flex-1"
-                                        onClick={() => setStep(3)}
-                                    >
-                                        Back
-                                    </Button>
-                                    <Button
-                                        className="flex-1"
-                                        onClick={handleSubmit}
-                                        disabled={loading}
-                                    >
-                                        {loading ? 'Saving...' : 'Complete Profile'}
-                                    </Button>
+                                        <div className="space-y-2">
+                                            <Label htmlFor="graduation_year" className="text-sm font-medium">
+                                                Graduation Year *
+                                            </Label>
+                                            <Input
+                                                id="graduation_year"
+                                                name="graduation_year"
+                                                type="number"
+                                                inputMode="numeric"
+                                                value={formData.graduation_year}
+                                                onChange={handleInputChange}
+                                                placeholder="e.g., 2025"
+                                                className="text-base"
+                                                required
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <Label htmlFor="course" className="text-sm font-medium">
+                                            Course *
+                                        </Label>
+                                        <Input
+                                            id="course"
+                                            name="course"
+                                            value={formData.course}
+                                            onChange={handleInputChange}
+                                            placeholder="e.g., Computer Science"
+                                            className="text-base"
+                                            required
+                                        />
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <Label htmlFor="religion" className="text-sm font-medium">
+                                            Religion <span className="text-gray-400">(optional)</span>
+                                        </Label>
+                                        <Input
+                                            id="religion"
+                                            name="religion"
+                                            value={formData.religion}
+                                            onChange={handleInputChange}
+                                            placeholder="Your religion"
+                                            className="text-base"
+                                        />
+                                    </div>
                                 </div>
-                            </div>
-                        )}
-                    </CardContent>
-                </Card>
+                            )}
+
+                            {/* Step 2: Preferences */}
+                            {step === 2 && (
+                                <div className="space-y-5">
+                                    <div>
+                                        <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">
+                                            Your Preferences
+                                        </h2>
+                                        <p className="text-sm text-gray-500 mb-6">
+                                            Help us find your perfect match
+                                        </p>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <Label className="text-sm font-medium">
+                                            Gender Preference *
+                                        </Label>
+                                        <Select
+                                            value={preferences.gender_preference}
+                                            onValueChange={(value) =>
+                                                setPreferences({ ...preferences, gender_preference: value })
+                                            }
+                                        >
+                                            <SelectTrigger className="text-base">
+                                                <SelectValue placeholder="Select gender preference" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="male">Male</SelectItem>
+                                                <SelectItem value="female">Female</SelectItem>
+                                                <SelectItem value="both">Both</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <Label className="text-sm font-medium">
+                                            Education Preference <span className="text-gray-400">(optional)</span>
+                                        </Label>
+                                        <Input
+                                            value={preferences.education_preference}
+                                            onChange={(e) =>
+                                                setPreferences({
+                                                    ...preferences,
+                                                    education_preference: e.target.value,
+                                                })
+                                            }
+                                            placeholder="e.g., Bachelor's, Master's"
+                                            className="text-base"
+                                        />
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Step 3: Photos */}
+                            {step === 3 && (
+                                <div className="space-y-5">
+                                    <div>
+                                        <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">
+                                            Upload Your Photos
+                                        </h2>
+                                        <p className="text-sm text-gray-500 mb-6">
+                                            Add at least one photo. The first one will be your profile picture.
+                                        </p>
+                                    </div>
+
+                                    <div className="space-y-4">
+                                        <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-pink-400 transition-colors">
+                                            <Input
+                                                type="file"
+                                                accept="image/*"
+                                                multiple
+                                                onChange={handlePhotoUpload}
+                                                className="hidden"
+                                                id="photo-upload"
+                                                required
+                                            />
+                                            <label
+                                                htmlFor="photo-upload"
+                                                className="cursor-pointer block"
+                                            >
+                                                <div className="text-4xl mb-2">📸</div>
+                                                <p className="text-sm font-medium text-gray-700 mb-1">
+                                                    Tap to upload photos
+                                                </p>
+                                                <p className="text-xs text-gray-500">
+                                                    You can select multiple images
+                                                </p>
+                                            </label>
+                                        </div>
+
+                                        {photos.length > 0 && (
+                                            <div className="bg-pink-50 rounded-lg p-4">
+                                                <p className="text-sm font-medium text-pink-900">
+                                                    ✓ {photos.length} photo(s) selected
+                                                </p>
+                                                <div className="mt-2 space-y-1">
+                                                    {Array.from(photos).map((photo, index) => (
+                                                        <p key={index} className="text-xs text-pink-700 truncate">
+                                                            {index === 0 && '⭐ '}{photo.name}
+                                                        </p>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Step 4: Interests */}
+                            {step === 4 && (
+                                <div className="space-y-5">
+                                    <div>
+                                        <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">
+                                            Your Interests
+                                        </h2>
+                                        <p className="text-sm text-gray-500 mb-6">
+                                            Select things you're passionate about
+                                        </p>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 gap-3">
+                                        {allInterests.map((interest) => (
+                                            <div
+                                                key={interest.id}
+                                                className={`flex items-center space-x-2 p-3 rounded-lg border-2 transition-all ${selectedInterests.includes(interest.id)
+                                                    ? 'border-pink-500 bg-pink-50'
+                                                    : 'border-gray-200 hover:border-gray-300'
+                                                    }`}
+                                            >
+                                                <Checkbox
+                                                    id={`interest-${interest.id}`}
+                                                    checked={selectedInterests.includes(interest.id)}
+                                                    onCheckedChange={(checked) => {
+                                                        if (checked) {
+                                                            setSelectedInterests([
+                                                                ...selectedInterests,
+                                                                interest.id,
+                                                            ]);
+                                                        } else {
+                                                            setSelectedInterests(
+                                                                selectedInterests.filter(
+                                                                    (id) => id !== interest.id
+                                                                )
+                                                            );
+                                                        }
+                                                    }}
+                                                />
+                                                <Label
+                                                    htmlFor={`interest-${interest.id}`}
+                                                    className="text-sm cursor-pointer flex-1"
+                                                >
+                                                    {interest.interest_name}
+                                                </Label>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    {selectedInterests.length > 0 && (
+                                        <div className="bg-pink-50 rounded-lg p-4">
+                                            <p className="text-sm font-medium text-pink-900">
+                                                {selectedInterests.length} interest(s) selected
+                                            </p>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </CardContent>
+                    </Card>
+                </div>
+            </div>
+
+            {/* Fixed Bottom Navigation */}
+            <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 sm:p-6 z-10">
+                <div className="max-w-2xl mx-auto flex gap-3">
+                    {step > 1 && (
+                        <Button
+                            variant="outline"
+                            className="flex-1 h-12 text-base font-medium"
+                            onClick={() => setStep(step - 1)}
+                        >
+                            Back
+                        </Button>
+                    )}
+                    {step < 4 ? (
+                        <Button
+                            className="flex-1 h-12 text-base font-medium bg-pink-600 hover:bg-pink-700"
+                            onClick={() => setStep(step + 1)}
+                            disabled={
+                                (step === 1 && !formData.bio) ||
+                                (step === 3 && photos.length === 0)
+                            }
+                        >
+                            Continue
+                        </Button>
+                    ) : (
+                        <Button
+                            className="flex-1 h-12 text-base font-medium bg-pink-600 hover:bg-pink-700"
+                            onClick={handleSubmit}
+                            disabled={loading}
+                        >
+                            {loading ? (
+                                <span className="flex items-center gap-2">
+                                    <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                    Saving...
+                                </span>
+                            ) : (
+                                'Complete Profile'
+                            )}
+                        </Button>
+                    )}
+                </div>
             </div>
         </div>
     );
