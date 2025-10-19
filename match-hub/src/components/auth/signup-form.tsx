@@ -120,7 +120,7 @@ export function SignupForm() {
             // Auto-login after signup
             await login(values.email, values.password);
 
-            router.push("/dashboard");
+            router.push("/profile/complete");
         } catch (err: any) {
             setError(
                 err.response?.data?.error ||
