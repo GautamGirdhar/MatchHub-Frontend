@@ -12,6 +12,7 @@ import {
     Ruler,
     Sparkles
 } from 'lucide-react';
+import Image from 'next/image';
 
 interface SwipeCardProps {
     user: UserCard;
@@ -86,7 +87,7 @@ export default function SwipeCard({ user, style, onSwipe }: SwipeCardProps) {
                 className="relative h-full cursor-pointer"
                 onClick={handlePhotoClick}
             >
-                <img
+                <Image
                     src={photos[currentPhotoIndex]}
                     alt={user.first_name}
                     className="w-full h-full object-cover"
@@ -102,8 +103,8 @@ export default function SwipeCard({ user, style, onSwipe }: SwipeCardProps) {
                             <div
                                 key={index}
                                 className={`flex-1 h-1 rounded-full transition-all ${index === currentPhotoIndex
-                                        ? 'bg-white'
-                                        : 'bg-white/40'
+                                    ? 'bg-white'
+                                    : 'bg-white/40'
                                     }`}
                             />
                         ))}

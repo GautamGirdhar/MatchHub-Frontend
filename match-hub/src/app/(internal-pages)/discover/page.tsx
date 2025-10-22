@@ -317,11 +317,7 @@ export default function DiscoveryPage() {
                             </button>
                         </div>
 
-                        {/* Swipe Instructions */}
-                        <div className="text-center text-sm text-gray-500">
-                            <p>👆 Tap buttons or swipe cards</p>
-                            <p className="mt-1">← Pass • ↑ Super Like • → Like</p>
-                        </div>
+
 
                         {/* Stats Card */}
                         <Card className="mt-6 p-4">
